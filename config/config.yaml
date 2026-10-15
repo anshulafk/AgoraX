@@ -1,0 +1,21 @@
+# Strategy Hyperparameters
+strategy:
+  symbols:
+    - RELIANCE.NS
+    - TCS.NS
+    - HDFCBANK.NS
+    - INFY.NS
+    - ^NSEI
+  timeframe: 1m
+  initial_capital: 100000
+
+# Risk Thresholds
+risk:
+  max_risk_per_trade_pct: 0.02
+  max_daily_drawdown_pct: 0.03
+  square_off_time_ist: "15:15"
+
+# Brokerage & Taxes Config
+brokerage:
+  flat_fee: 20
+  percentage_cap: 0.0003
