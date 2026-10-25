@@ -7,8 +7,10 @@ from pydantic_settings import BaseSettings
 BASE_DIR = Path(__file__).resolve().parent.parent
 CONFIG_FILE = BASE_DIR / "config" / "config.yaml"
 
+DB_PATH = (BASE_DIR / "trading_engine.db").as_posix()
+
 class Settings(BaseSettings):
-    DATABASE_URL: str = "sqlite:///./trading_engine.db"
+    DATABASE_URL: str = f"sqlite:///{DB_PATH}"
     ENVIRONMENT: str = "development"
 
     class Config:

@@ -17,6 +17,8 @@ def fetch_historical_data(symbol: str, interval: str = "1m", period: str = "5d")
     
     if cache_file.exists():
         df = pd.read_csv(cache_file, index_col="timestamp", parse_dates=True)
+        if "symbol" not in df.columns:
+            df["symbol"] = symbol
         return df
     
     ticker = yf.Ticker(symbol)
@@ -26,6 +28,7 @@ def fetch_historical_data(symbol: str, interval: str = "1m", period: str = "5d")
         # Standardize column names
         df.columns = [col.lower() for col in df.columns]
         df.index.name = "timestamp"
+        df["symbol"] = symbol
         
         # Save to cache
         df.to_csv(cache_file)

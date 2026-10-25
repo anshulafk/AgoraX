@@ -13,6 +13,14 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
+def init_db():
+    """Initializes all database tables if they do not exist."""
+    import database.models  # noqa: F401
+    Base.metadata.create_all(bind=engine)
+
+# Auto-initialize tables so they exist on first run / fresh deployments
+init_db()
+
 def get_db():
     db = SessionLocal()
     try:

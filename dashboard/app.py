@@ -16,11 +16,15 @@ if str(root_dir) not in _sys.path:
     _sys.path.append(str(root_dir))
 
 from config.settings import settings, config_yaml
+from database.connection import engine as db_engine, init_db
 from data.historical import fetch_historical_data
 from backtester.engine import BacktestEngine
 from strategies.sma_crossover import SMACrossoverStrategy
 from strategies.rsi_momentum import RSIMomentumStrategy
 from strategies.bollinger_bands import BollingerBandsStrategy
+
+# Ensure database tables exist immediately on startup (fixes "no such table: orders" on fresh deployments)
+init_db()
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 IST = pytz.timezone("Asia/Kolkata")
@@ -415,11 +419,7 @@ st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
-@st.cache_resource
-def get_db_engine():
-    return create_engine(settings.DATABASE_URL)
-
-db_engine = get_db_engine()
+# db_engine is imported from database.connection with thread-safe settings
 
 def is_market_open() -> bool:
     now = datetime.now(IST)
@@ -650,6 +650,21 @@ try:
 except Exception:
     df_runs = df_trades = df_orders = pd.DataFrame()
     has_data = False
+
+# Auto-seed initial backtest on fresh cloud deployments if DB has 0 runs
+if not has_data and not run_bt:
+    try:
+        with st.spinner("Initializing simulation data for fresh deployment..."):
+            starter_data = fetch_historical_data("RELIANCE.NS", interval="1m", period="5d")
+            if not starter_data.empty:
+                starter_eng = BacktestEngine(strategy=build_strategy("SMA Crossover"), historical_data=starter_data)
+                starter_eng.run()
+                df_runs   = pd.read_sql("SELECT * FROM backtest_runs ORDER BY id DESC", db_engine)
+                df_trades = pd.read_sql("SELECT * FROM trades ORDER BY timestamp DESC", db_engine)
+                df_orders = pd.read_sql("SELECT * FROM orders ORDER BY timestamp DESC", db_engine)
+                has_data  = not df_runs.empty
+    except Exception:
+        pass
 
 latest = df_runs.iloc[0] if has_data else None
 
