@@ -18,9 +18,6 @@ def init_db():
     import database.models  # noqa: F401
     Base.metadata.create_all(bind=engine)
 
-# Auto-initialize tables so they exist on first run / fresh deployments
-init_db()
-
 def get_db():
     db = SessionLocal()
     try:

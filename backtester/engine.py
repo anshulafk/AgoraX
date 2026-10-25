@@ -1,7 +1,7 @@
 import logging
 import pandas as pd
 from datetime import datetime
-from database.connection import SessionLocal
+from database.connection import SessionLocal, init_db
 from database.models import BacktestRun
 from execution.paper_broker import PaperBroker
 from risk.risk_guard import RiskGuard
@@ -21,6 +21,7 @@ class BacktestEngine:
         self.data = historical_data.sort_index()
         self.initial_capital = config_yaml['strategy']['initial_capital']
         
+        init_db()
         self.db = SessionLocal()
         self.broker = PaperBroker(initial_capital=self.initial_capital, db=self.db)
         self.risk_guard = RiskGuard(initial_daily_capital=self.initial_capital)
