@@ -537,7 +537,7 @@ hdr_left, hdr_right = st.columns([1.1, 0.9])
 with hdr_left:
     st.markdown(
         f'<div class="header-bar" style="margin-bottom:0;">'
-        f'<div class="header-brand">AgoraX · Quantitative Trading Workstation</div>'
+        f'<div class="header-brand">AgoraX · An Algorithmic Trading Engine</div>'
         f'<div style="display:flex;align-items:center;gap:1.2rem;">'
         f'{mkt_html}'
         f'<span class="header-time">{now_ist.strftime("%d %b %Y  %H:%M:%S IST")}</span>'
