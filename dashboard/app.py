@@ -56,7 +56,6 @@ STOCKS = {
     "TCS.NS": "TCS",
     "HDFCBANK.NS": "HDFC Bank",
     "INFY.NS": "Infosys",
-    "TATAMOTORS.NS": "Tata Motors",
     "ETERNAL.NS": "Eternal(Zomato)",
     "WIPRO.NS": "Wipro",
     "ICICIBANK.NS": "ICICI Bank",
