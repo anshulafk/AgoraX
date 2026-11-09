@@ -67,7 +67,7 @@ STOCKS = {
 
 # ── Page Config & Global CSS ──────────────────────────────────────────────────
 st.set_page_config(
-    page_title="AgoraX · Trading Workstation",
+    page_title="AgoraX · An Algorithmic Trading Engine",
     layout="wide",
     page_icon="⚡",
     initial_sidebar_state="expanded",
